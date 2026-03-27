@@ -142,7 +142,7 @@ const Cart = () => {
                 </button>
                 <span className="font-medium">{cartItem.quantity}</span>
                 <button
-                  className="rounded-full border p-2 hover:bg-gray-100 disabled::opacity-50"
+                  className="rounded-full border p-2 hover:bg-gray-100 disabled:opacity-50"
                   disabled={isLoading}
                   onClick={() => increaseQty(item._id)}
                 >
@@ -163,7 +163,7 @@ const Cart = () => {
       </div>
 
       <div className="rounded-xl bg-white p-4 shadow-sm space-y-3 ">
-        <div className="text justify-between text-sm">
+        <div className="flex justify-between text-sm">
           <span>Total Item</span>
           <span>{quantity}</span>
         </div>
