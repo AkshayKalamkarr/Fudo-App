@@ -84,7 +84,7 @@ export const payWithStripe = async (req: Request, res: Response) => {
       line_items: [
         {
           price_data: {
-            currency: "INR",
+            currency: "inr",
             product_data: {
               name: "Fudo Food Order",
             },
