@@ -25,7 +25,7 @@ router.post("/emit", (req, res) => {
 
   io.to(room).emit(event, payload ?? {});
 
-  return res.json({ sucess: true });
+  return res.json({ success: true });
 });
 
 

@@ -44,8 +44,8 @@ export const initSocket = (server: http.Server) => {
     const userId = user._id;
     socket.join(`user:${userId}`);
 
-    if (user.restaurentid) {
-      socket.join(`restaurant:${user.restaurentid}`);
+    if (user.restaurentId) {
+      socket.join(`restaurant:${user.restaurentId}`);
     }
     console.log(`User connected: ${userId}`);
     console.log("socket room: ",[...socket.rooms]);

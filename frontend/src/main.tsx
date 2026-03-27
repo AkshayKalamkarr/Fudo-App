@@ -5,7 +5,7 @@ import App from "./App.tsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { AppProvider } from "./context/AppContext.tsx";
 import "leaflet/dist/leaflet.css";
-import { SocketProvider } from "./context/SeckotContext.tsx";
+import { SocketProvider } from "./context/SocketContext.tsx";
 
 export const authService = "http://localhost:5000";
 export const restaurentService = "http://localhost:5001";

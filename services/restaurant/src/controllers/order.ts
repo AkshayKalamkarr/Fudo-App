@@ -185,3 +185,35 @@ export const fetchOrderForPayment = TryCatch(async (req, res) => {
     currency: "INR",
   });
 });
+
+export const fetchRestaurentOrders = TryCatch(
+  async (req: AuthenticatedRequest, res) => {
+    const user = req.user;
+
+    const { restaurentId } = req.params;
+
+    if (!user) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
+
+    if (!restaurentId) {
+      return res.status(400).json({
+        message: "Restaurent Id Is required",
+      });
+    }
+
+    const limit = req.query.limit ? Number(req.query.limit) : 0;
+
+    const orders = await Order.find({ restaurentId, paymentStatus: "paid" })
+      .sort({ createdAt: -1 })
+      .limit(limit);
+
+    return res.json({
+      success: true,
+      count: orders.length,
+      orders,
+    });
+  },
+);
