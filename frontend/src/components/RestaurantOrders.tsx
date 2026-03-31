@@ -4,6 +4,7 @@ import { useSocket } from "../context/SocketContext";
 import audio from "../assets/iPhone.mp3";
 import axios from "axios";
 import { restaurentService } from "../main";
+import OrderCard from "./OrderCard";
 
 const ACTIVE_STATUSES = [
   "placed",
@@ -125,31 +126,38 @@ const RestaurantOrders = ({ restaurentId }: { restaurentId: string }) => {
       <div className="space-y-3 ">
         <h3 className="text-lg font-semibold">Active Orders</h3>
 
-        {
-
-          activeOrders.length === 0 ? <p className="text-sm text-grey-500">No Acive Orders</p> : <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {activeOrders.map((order)=>(
-              <p key={order._id}>{order._id}</p>
+        {activeOrders.length === 0 ? (
+          <p className="text-sm text-grey-500">No Acive Orders</p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {activeOrders.map((order) => (
+              <OrderCard
+                key={order._id}
+                order={order}
+                onStatusUpdate={fetchOrders}
+              />
             ))}
           </div>
-        }
+        )}
       </div>
-
 
       <div className="space-y-3 ">
         <h3 className="text-lg font-semibold">Completed Orders</h3>
 
-        {
-
-          completedOrders.length === 0 ? <p className="text-sm text-grey-500">No Completed Orders</p> : <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {completedOrders.map((order)=>(
-              <p key={order._id}>{order._id}</p>
+        {completedOrders.length === 0 ? (
+          <p className="text-sm text-grey-500">No Completed Orders</p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {completedOrders.map((order) => (
+              <OrderCard
+                key={order._id}
+                order={order}
+                onStatusUpdate={fetchOrders}
+              />
             ))}
           </div>
-        }
+        )}
       </div>
-
-
     </div>
   );
 };
