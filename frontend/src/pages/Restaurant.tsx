@@ -6,6 +6,7 @@ import AddRestaurent from "../components/AddRestaurent";
 import RestaurantProfile from "../components/RestaurantProfile";
 import MenuItems from "../components/MenuItems";
 import AddMenuItems from "../components/AddMenuItems";
+import RestaurantOrders from "../components/RestaurantOrders";
 
 type SelletTab = "menu" | "add-item" | "sales";
 
@@ -83,6 +84,9 @@ const Restaurant = () => {
         onUpdate={setRestaurent}
         isSeller={true}
       />
+
+      <RestaurantOrders restaurentId={restaurent._id} />
+
       <div className="rounded-xl bg-white shadow-sm">
         <div className="flex border-b">
           {[
@@ -110,7 +114,7 @@ const Restaurant = () => {
           )}
           {tab === "add-item" && (
             <AddMenuItems onItemAdded={() => fetchMenuItems(restaurent._id)} />
-          )}   
+          )}
           {tab === "sales" && <p>Sales Page</p>}
         </div>
       </div>
