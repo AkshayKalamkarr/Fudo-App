@@ -18,6 +18,7 @@ import Checkout from "./pages/Checkout.js";
 import PaymentSucess from "./pages/PaymentSucess.js";
 import OrderSucess from "./pages/OrderSucess.js";
 import Orders from "./pages/Orders.js";
+import OrderPage from "./pages/OrderPage.js";
 
 const App = () => {
   const { user } = useAppData();
@@ -38,14 +39,9 @@ const App = () => {
               path="/paymentsuccess/:paymentId"
               element={<PaymentSucess />}
             />
-            <Route
-              path="/orders"
-              element={<Orders />}
-            />
-            <Route
-              path="/ordersuccess"
-              element={<OrderSucess />}
-            />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/order/:id" element={<OrderPage />} />
+            <Route path="/ordersuccess" element={<OrderSucess />} />
             <Route path="/address" element={<AddAddressPage />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/restaurant/:id" element={<RestaurantPage />} />
