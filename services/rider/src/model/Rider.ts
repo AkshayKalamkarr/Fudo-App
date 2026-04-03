@@ -17,54 +17,62 @@ export interface IRider extends Document {
   updatedAt: Date;
 }
 
-const schema = new Schema<IRider>({
-  userId: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  picture: {
-    type: String,
-    required: true,
-  },
-  phoneNumber: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-
-  aadharNumber: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-
-  drivingLicenseNumber: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  isVerified: {
-    type: Boolean,
-    default: false,
-  },
-  location: {
-    type: {
+const schema = new Schema<IRider>(
+  {
+    userId: {
       type: String,
-      enum: ["Point"],
-      default: "Point",
+      required: true,
+      unique: true,
     },
-    coordinates: {
-      type: [Number],
+    picture: {
+      type: String,
       required: true,
     },
+    phoneNumber: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true
+    },
+
+    aadharNumber: {
+      type: String,
+      required: true,
+    },
+
+    drivingLicenseNumber: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+      },
+      coordinates: {
+        type: [Number],
+        required: true,
+      },
+    },
+    isAvailable: {
+      type: Boolean,
+      default: false,
+    },
+    lastActiveAt: {
+      type: Date,
+      default: Date.now,
+    },
   },
-  isAvailable: {
-    type: Boolean,
-    default: false,
+  {
+    timestamps: true,
   },
-  lastActiveAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+);
+
+schema.index({ location: "2dsphere" });
+export const Rider = mongoose.model<IRider>("Rider", schema);

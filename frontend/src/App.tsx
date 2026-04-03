@@ -19,11 +19,22 @@ import PaymentSucess from "./pages/PaymentSucess.js";
 import OrderSucess from "./pages/OrderSucess.js";
 import Orders from "./pages/Orders.js";
 import OrderPage from "./pages/OrderPage.js";
+import RiderDashboard from "./pages/RiderDashboard.js";
 
 const App = () => {
-  const { user } = useAppData();
+  const { user,loading } = useAppData();
+
+  if(loading){
+    return <h1 className="text-2xl font-bold text-red-500 text-center mt-56">Loading....</h1>
+  }
+
+
   if (user && user.role === "seller") {
     return <Restaurant />;
+  }
+
+  if (user && user.role === "rider") {
+    return <RiderDashboard />;
   }
   return (
     <>

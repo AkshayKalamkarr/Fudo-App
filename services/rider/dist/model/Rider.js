@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 const schema = new Schema({
     userId: {
         type: String,
@@ -13,11 +13,11 @@ const schema = new Schema({
         type: String,
         required: true,
         unique: true,
+        trim: true
     },
     aadharNumber: {
         type: String,
         required: true,
-        unique: true,
     },
     drivingLicenseNumber: {
         type: String,
@@ -47,4 +47,8 @@ const schema = new Schema({
         type: Date,
         default: Date.now,
     },
+}, {
+    timestamps: true,
 });
+schema.index({ location: "2dsphere" });
+export const Rider = mongoose.model("Rider", schema);
