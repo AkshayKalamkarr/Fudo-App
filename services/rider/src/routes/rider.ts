@@ -1,12 +1,16 @@
-import express from 'express'
-import { isAuth } from '../middlewares/isAuth.js'
-import { fetchMyProfile } from '../controller/rider.js'
+import express from "express";
+import { isAuth } from "../middlewares/isAuth.js";
+import {
+  addRiderProfile,
+  fetchMyProfile,
+  toogleRiderAvailability,
+} from "../controller/rider.js";
+import uploadFile from "../middlewares/multer.js";
 
-const router = express.Router()
+const router = express.Router();
 
-router.get("/myprofile",isAuth,fetchMyProfile)
+router.post("/new", isAuth, uploadFile, addRiderProfile);
+router.get("/myprofile", isAuth, fetchMyProfile);
+router.patch("/toggle", isAuth, toogleRiderAvailability);
 
-
-
-
-export default router
+export default router;

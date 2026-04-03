@@ -16,7 +16,7 @@ export const addRiderProfile = TryCatch(async (req, res) => {
     }
     const file = req.file;
     if (!file) {
-        res.status(400).json({
+        return res.status(400).json({
             message: "Rider image is required",
         });
     }
@@ -55,7 +55,7 @@ export const addRiderProfile = TryCatch(async (req, res) => {
         drivingLicenseNumber,
         location: {
             type: "Point",
-            cooradinates: [longitude, latitude],
+            coordinates: [longitude, latitude],
         },
         isAvailable: false,
         isVerified: false,
@@ -111,7 +111,7 @@ export const toogleRiderAvailability = TryCatch(async (req, res) => {
     rider.isAvailable = isAvailable;
     rider.location = {
         type: "Point",
-        cooradinates: [longitude, latitude],
+        coordinates: [longitude, latitude],
     };
     rider.lastActiveAt = new Date();
     await rider.save();

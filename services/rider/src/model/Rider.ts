@@ -9,7 +9,7 @@ export interface IRider extends Document {
   isVerified: boolean;
   location: {
     type: "Point";
-    cooradinates: [number, number];
+    coordinates: [number, number];
   };
   isAvailable: boolean;
   lastActiveAt: Date;
