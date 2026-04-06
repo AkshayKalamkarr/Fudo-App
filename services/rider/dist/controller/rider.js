@@ -120,3 +120,33 @@ export const toogleRiderAvailability = TryCatch(async (req, res) => {
         rider,
     });
 });
+export const acceptOrder = TryCatch(async (req, res) => {
+    const riderUserId = req.user?._id;
+    const { orderId } = req.params;
+    if (!riderUserId) {
+        return res.status(400).json({
+            message: "Please Login",
+        });
+    }
+    const rider = await Rider.findOne({ userId: riderUserId, isAvailable: true });
+    if (!rider) {
+        return res.status(404).json({ message: "rider not found" });
+    }
+    try {
+        const { data } = await axios.post(`${process.env.RESTAURANT_SERVICE}/api/order/assign/rider`, {
+            orderId,
+            riderId: rider._id.toString(),
+            riderUserId: rider.userId,
+            riderName: rider.picture,
+            riderPhone: rider.phoneNumber,
+        }, {
+            headers: {
+                "x-internal-key": process.env.INTERNAL_SERVICE_KEY,
+            },
+        });
+        if (data.success) {
+            const riderDetails = await Rider.findOneAndUpdate({ userId: riderUserId, isAvailable: true }, { isAvailable: false }, { new: true });
+        }
+    }
+    catch (error) { }
+});
