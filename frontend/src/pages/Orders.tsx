@@ -50,10 +50,12 @@ const Orders = () => {
       fetchOrders();
     };
 
-    socket.on("order_updated", onOrderUpdate);
+    socket.on("order:update", onOrderUpdate);
+    socket.on("order:rider_assigned", onOrderUpdate);
 
     return () => {
-      socket.off("order_updated", onOrderUpdate);
+      socket.off("order:update", onOrderUpdate);
+      socket.off("order:rider_assigned", onOrderUpdate);
     };
   }, [socket]);
 

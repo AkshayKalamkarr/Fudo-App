@@ -6,6 +6,9 @@ export const connectRabbitMQ = async () => {
     await channel.assertQueue(process.env.RIDER_QUEUE, {
         durable: true,
     });
+    await channel.assertQueue(process.env.ORDER_READY_QUEUE, {
+        durable: true,
+    });
     console.log("🐇 connected to rabbitMQ (Rider Service) ");
 };
 export const getChannel = () => channel;

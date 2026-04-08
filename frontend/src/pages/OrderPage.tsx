@@ -40,10 +40,12 @@ const OrderPage = () => {
       fetchOrder();
     };
 
-    socket.on("order_updated", onOrderUpdate);
+    socket.on("order:update", onOrderUpdate);
+    socket.on("order:rider_assigned", onOrderUpdate);
 
     return () => {
-      socket.off("order_updated", onOrderUpdate);
+      socket.off("order:update", onOrderUpdate);
+      socket.off("order:rider_assigned", onOrderUpdate);
     };
   }, [socket]);
 
@@ -111,7 +113,7 @@ const OrderPage = () => {
           Payment Method : {order.paymentMethod}
         </p>
 
-        <p className="text-xs text-gray-500"> 
+        <p className="text-xs text-gray-500">
           Payment Status : {order.paymentStatus}
         </p>
       </div>

@@ -87,6 +87,19 @@ const RestaurantOrders = ({ restaurentId }: { restaurentId: string }) => {
     };
   }, [socket, audioUnlocked]);
 
+  useEffect(() => {
+    if (!socket) return;
+
+    const onUpdateOrder = () => {
+      fetchOrders();
+    };
+
+    socket.on("order:rider_assigned", onUpdateOrder);
+    return () => {
+      socket.off("order:rider_assigned", onUpdateOrder);
+    };
+  }, [socket]);
+
   if (loading) {
     return <p className="text-grey-500">Loading Orders</p>;
   }

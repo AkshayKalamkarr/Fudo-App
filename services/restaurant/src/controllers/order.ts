@@ -264,7 +264,7 @@ export const updateOrderStatus = TryCatch(
     const { orderId } = req.params;
     const { status } = req.body;
 
-    const { restaurentId } = req.params;
+    // const { restaurentId } = req.params;
 
     if (!user) {
       return res.status(401).json({
@@ -417,7 +417,7 @@ export const assignRiderToOrder = TryCatch(async (req, res) => {
       riderId,
       riderName,
       riderPhone,
-      status: "rider,assigned",
+      status: "rider_assigned",
     },
     { new: true },
   );
@@ -464,7 +464,7 @@ export const getCurrentOrdersForRider = TryCatch(async (req, res) => {
     });
   }
 
-  const { riderId } = req.body;
+  const { riderId } = req.body; 
   if (!riderId) {
     return res.status(400).json({
       message: "Rider Id is Required",

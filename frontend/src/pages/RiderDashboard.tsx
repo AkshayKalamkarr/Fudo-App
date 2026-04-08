@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppData } from "../context/AppContext";
 import { useSocket } from "../context/SocketContext";
 import axios from "axios";
 import { riderService } from "../main";
 import toast from "react-hot-toast";
 import { BiUpload } from "react-icons/bi";
+import type { IOrder } from "../types";
+import audio from "../assets/iPhone.mp3";
 
 interface IRider {
   _id: string;
@@ -24,6 +26,55 @@ const RiderDashboard = () => {
   const [profile, setProfile] = useState<IRider | null>(null);
   const [loading, setLoading] = useState(true);
   const [toggling, settoggling] = useState(false);
+
+  const [incomingOrders, setIncomingOrders] = useState<string[]>([]);
+  const [currentOrders, setCurrentOrders] = useState<IOrder | null>(null);
+
+  const [audioUnlocked, setaudioUnlocked] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    audioRef.current = new Audio(audio);
+    audioRef.current.preload = "auto";
+  }, []);
+
+  const unLockedAudio = async () => {
+    try {
+      if (!audioRef.current) return;
+      await audioRef.current.play();
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      setaudioUnlocked(true);
+      toast.success("Sound enabled");
+    } catch (error) {
+      toast.error("tap again to enable sound");
+    }
+  };
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const onOrderAvailable = ({ orderId }: { orderId: string }) => {
+      setIncomingOrders((prev) =>
+        prev.includes(orderId) ? prev : [...prev, orderId], 
+      );
+
+      if (audioUnlocked && audioRef.current) {
+        audioRef.current.currentTime = 0;
+        audioRef.current.play().catch(() => {});
+      }
+
+      setTimeout(() => {
+        setIncomingOrders((prev) => prev.filter((id) => id !== orderId));
+      }, 10000);
+    };
+
+    socket.on("order:available", onOrderAvailable);
+
+    return () => {
+      socket.off("order:available", onOrderAvailable);
+    };
+  }, [socket, audioUnlocked]);
 
   const fetchProfile = async () => {
     try {
@@ -45,6 +96,30 @@ const RiderDashboard = () => {
     if (user?.role === "rider") fetchProfile();
     else setLoading(false);
   }, [user]);
+
+
+
+  const fetchCurrentOrder = async () => {
+    try {
+      const { data } = await axios.get(
+        `${riderService}/api/rider/order/current`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+
+      setCurrentOrders(data.order);
+    } catch (error) {
+      console.log(error);
+      setCurrentOrders(null);
+    }
+  };
+  
+  useEffect(() => {
+    fetchCurrentOrder();
+  }, []);
 
   const toggleAvailability = async () => {
     if (!navigator.geolocation) {
@@ -237,6 +312,38 @@ const RiderDashboard = () => {
           )}
         </div>
       </div>
+
+      {!audioUnlocked && (
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">🔔</span>
+            <div>
+              <p className="font-medium text-blue-900">
+                Enable sound Notification
+              </p>
+              <p className="text-sm text-blue-700">
+                Get Notified when new orders arrive
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={unLockedAudio}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition"
+          >
+            Enable Sound
+          </button>
+        </div>
+      )}
+
+      {profile.isAvailable && incomingOrders.length > 0 && (
+        <div className="mx-auto max-w-md px-4 space-y-3">
+          <h3 className="font-semibold text-gray-700">Incoming Orders</h3>
+          {incomingOrders.map((id) => (
+            <p key={id}>{id}</p>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
