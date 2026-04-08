@@ -133,7 +133,7 @@ export const acceptOrder = TryCatch(async (req, res) => {
         return res.status(404).json({ message: "rider not found" });
     }
     try {
-        const { data } = await axios.put(`${process.env.RESTAURANT_SERVICE}/api/order/current/assign/rider`, {
+        const { data } = await axios.put(`${process.env.RESTAURANT_SERVICE}/api/order/assign/rider`, {
             orderId,
             riderId: rider._id.toString(),
             riderUserId: rider.userId,
@@ -151,7 +151,7 @@ export const acceptOrder = TryCatch(async (req, res) => {
     }
     catch (error) {
         res.status(400).json({
-            message: "Order already taken",
+            message: error?.response?.data?.message || "Order already taken",
         });
     }
 });
@@ -164,13 +164,12 @@ export const fetchMyCurrentOrder = TryCatch(async (req, res) => {
     }
     const rider = await Rider.findOne({
         userId: riderUserId,
-        isAvailable: true,
     });
     if (!rider) {
         return res.status(404).json({ message: "Rider not found" });
     }
     try {
-        const { data } = await axios.get(`${process.env.RESTAURANT_SERVICE}/api/current/rider?riderId=${rider._id}`, {
+        const { data } = await axios.get(`${process.env.RESTAURANT_SERVICE}/api/order/current/rider?riderId=${rider._id}`, {
             headers: {
                 "x-internal-key": process.env.INTERNAL_SERVICE_KEY,
             },
@@ -200,7 +199,7 @@ export const updateOrderStatus = TryCatch(async (req, res) => {
     }
     const { orderId } = req.params;
     try {
-        const { data } = await axios.put(`${process.env.RESTAURANT_SERVICE}/api/order/update/rider`, {
+        const { data } = await axios.put(`${process.env.RESTAURANT_SERVICE}/api/order/update/status/rider`, {
             orderId,
         }, {
             headers: {
@@ -213,7 +212,7 @@ export const updateOrderStatus = TryCatch(async (req, res) => {
     }
     catch (error) {
         res.status(500).json({
-            message: "internal server error",
+            message: error?.response?.data?.message || "internal server error",
         });
     }
 });

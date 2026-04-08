@@ -50,7 +50,7 @@ export const startOrderReadyConsumer = async () => {
 
         try {
           await axios.post(
-            `${process.env.REALTIME_SERVICE}/api/v1/internal/emit`,
+            `${process.env.REALTIME_SERVICE_URL}/api/v1/internal/emit`,
             {
               event: "order:available",
               room: `user:${rider.userId}`,

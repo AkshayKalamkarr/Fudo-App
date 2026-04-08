@@ -464,7 +464,7 @@ export const getCurrentOrdersForRider = TryCatch(async (req, res) => {
     });
   }
 
-  const { riderId } = req.body; 
+  const riderId = req.query.riderId as string;
   if (!riderId) {
     return res.status(400).json({
       message: "Rider Id is Required",
@@ -491,7 +491,7 @@ export const updateOrderStatusRider = TryCatch(async (req, res) => {
     });
   }
 
-  const orderId = req.body;
+  const { orderId } = req.body;
   const order = await Order.findById(orderId);
 
   if (!order) {

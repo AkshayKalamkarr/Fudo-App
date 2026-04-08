@@ -5,7 +5,7 @@ export const publishEvent = async (type: string, data: any) => {
 
   channel.sendToQueue(
     process.env.ORDER_READY_QUEUE!,
-    Buffer.from(JSON.stringify({ type: data })),
+    Buffer.from(JSON.stringify({ type, data })),
     { persistent: true },
   );
 };

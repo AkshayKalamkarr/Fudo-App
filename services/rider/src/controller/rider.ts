@@ -187,7 +187,7 @@ export const acceptOrder = TryCatch(async (req: AuthenticatedRequest, res) => {
 
   try {
     const { data } = await axios.put(
-      `${process.env.RESTAURANT_SERVICE}/api/order/current/assign/rider`,
+      `${process.env.RESTAURANT_SERVICE}/api/order/assign/rider`,
       {
         orderId,
         riderId: rider._id.toString(),
@@ -210,9 +210,9 @@ export const acceptOrder = TryCatch(async (req: AuthenticatedRequest, res) => {
       );
       res.json({ message: "order accepted " });
     }
-  } catch (error) {
+  } catch (error: any) {
     res.status(400).json({
-      message: "Order already taken",
+      message: error?.response?.data?.message || "Order already taken",
     });
   }
 });
@@ -229,7 +229,6 @@ export const fetchMyCurrentOrder = TryCatch(
 
     const rider = await Rider.findOne({
       userId: riderUserId,
-      isAvailable: true,
     });
 
     if (!rider) {
@@ -238,7 +237,7 @@ export const fetchMyCurrentOrder = TryCatch(
 
     try {
       const { data } = await axios.get(
-        `${process.env.RESTAURANT_SERVICE}/api/current/rider?riderId=${rider._id}`,
+        `${process.env.RESTAURANT_SERVICE}/api/order/current/rider?riderId=${rider._id}`,
         {
           headers: {
             "x-internal-key": process.env.INTERNAL_SERVICE_KEY,
@@ -279,7 +278,7 @@ export const updateOrderStatus = TryCatch(
 
     try {
       const { data } = await axios.put(
-        `${process.env.RESTAURANT_SERVICE}/api/order/update/rider`,
+        `${process.env.RESTAURANT_SERVICE}/api/order/update/status/rider`,
         {
           orderId,
         },
@@ -293,9 +292,9 @@ export const updateOrderStatus = TryCatch(
       res.json({
         message: data.message,
       });
-    } catch (error) {
+    } catch (error: any) {
       res.status(500).json({
-        message: "internal server error",
+        message: error?.response?.data?.message || "internal server error",
       });
     }
   },
