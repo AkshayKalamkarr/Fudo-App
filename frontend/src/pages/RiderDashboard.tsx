@@ -56,12 +56,12 @@ const RiderDashboard = () => {
 
     const onOrderAvailable = ({ orderId }: { orderId: string }) => {
       setIncomingOrders((prev) =>
-        prev.includes(orderId) ? prev : [...prev, orderId], 
+        prev.includes(orderId) ? prev : [...prev, orderId],
       );
 
       if (audioUnlocked && audioRef.current) {
         audioRef.current.currentTime = 0;
-        audioRef.current.play().catch(() => {});
+        audioRef.current.play().catch(() => { });
       }
 
       setTimeout(() => {
@@ -116,7 +116,7 @@ const RiderDashboard = () => {
       setCurrentOrders(null);
     }
   };
-  
+
   useEffect(() => {
     fetchCurrentOrder();
   }, []);
