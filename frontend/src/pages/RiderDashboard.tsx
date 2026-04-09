@@ -7,6 +7,9 @@ import toast from "react-hot-toast";
 import { BiUpload } from "react-icons/bi";
 import type { IOrder } from "../types";
 import audio from "../assets/iPhone.mp3";
+import RiderOrderRequest from "../components/RiderOrderRequest";
+import RiderCurrentOrder from "../components/RiderCurrentOrder";
+import RiderOrderMap from "../components/RiderOrderMap";
 
 interface IRider {
   _id: string;
@@ -96,8 +99,6 @@ const RiderDashboard = () => {
     if (user?.role === "rider") fetchProfile();
     else setLoading(false);
   }, [user]);
-
-
 
   const fetchCurrentOrder = async () => {
     try {
@@ -297,7 +298,7 @@ const RiderDashboard = () => {
             </p>
           </div>
 
-          {profile.isVerified && (
+          {profile.isVerified && !currentOrders && (
             <button
               onClick={toggleAvailability}
               disabled={toggling}
@@ -340,10 +341,25 @@ const RiderDashboard = () => {
         <div className="mx-auto max-w-md px-4 space-y-3">
           <h3 className="font-semibold text-gray-700">Incoming Orders</h3>
           {incomingOrders.map((id) => (
-            <p key={id}>{id}</p>
+            <RiderOrderRequest
+              key={id}
+              orderId={id}
+              onAccepted={() => {
+                fetchProfile();
+                fetchCurrentOrder();
+              }}
+            />
           ))}
         </div>
       )}
+
+      {currentOrders && (<div className="mx-auto max-w-md px-4 space-y-4">
+        <RiderCurrentOrder order={currentOrders} onStatusUpdate={fetchCurrentOrder} />
+        <RiderOrderMap order={currentOrders} />
+      </div>)}
+
+
+
     </div>
   );
 };

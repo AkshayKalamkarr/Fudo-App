@@ -208,11 +208,13 @@ export const acceptOrder = TryCatch(async (req: AuthenticatedRequest, res) => {
         { isAvailable: false },
         { new: true },
       );
-      res.json({ message: "order accepted " });
+      return res.json({ message: "order accepted " });
+    } else {
+      return res.status(400).json({ message: data.message || "Failed to assign order" });
     }
   } catch (error: any) {
-    res.status(400).json({
-      message: error?.response?.data?.message || "Order already taken",
+    return res.status(error?.response?.status || 400).json({
+      message: error?.response?.data?.message || "Order already taken or unavailable",
     });
   }
 });
@@ -229,6 +231,7 @@ export const fetchMyCurrentOrder = TryCatch(
 
     const rider = await Rider.findOne({
       userId: riderUserId,
+      isVerified: true
     });
 
     if (!rider) {

@@ -51,7 +51,7 @@ export const startPaymentConsumer = async () => {
             orderId: order._id,
           },
         },
-        { 
+        {
           headers: {
             "x-internal-key": process.env.INTERNAL_SERVICE_KEY,
           },

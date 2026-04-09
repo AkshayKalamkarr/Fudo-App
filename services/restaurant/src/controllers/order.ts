@@ -48,9 +48,9 @@ export const createOrder = TryCatch(async (req: AuthenticatedRequest, res) => {
     const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
       Math.cos((lat1 * Math.PI) / 180) *
-        Math.cos((lat2 * Math.PI) / 180) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
 
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return +(R * c).toFixed(2);
@@ -400,6 +400,16 @@ export const assignRiderToOrder = TryCatch(async (req, res) => {
   }
 
   const { orderId, riderId, riderName, riderPhone } = req.body;
+
+  const orderAvailable = await Order.findOne({ riderId, status: { $ne: "delivered" } })
+
+  if (orderAvailable) {
+    return res.status(400).json({
+      message: "You already have an order",
+    })
+  }
+
+
   const order = await Order.findById(orderId);
 
   if (order?.riderId !== null) {
@@ -422,6 +432,12 @@ export const assignRiderToOrder = TryCatch(async (req, res) => {
     { new: true },
   );
 
+  if (!orderUpdated) {
+    return res.status(400).json({
+      message: "Order already taken or not found",
+    });
+  }
+
   await axios.post(
     `${process.env.REALTIME_SERVICE_URL}/api/v1/internal/emit`,
     {
@@ -441,7 +457,7 @@ export const assignRiderToOrder = TryCatch(async (req, res) => {
     {
       event: "order:rider_assigned",
       room: `restaurent:${order.restaurentId}`,
-      payload: order,
+      payload: orderUpdated,
     },
     {
       headers: {
