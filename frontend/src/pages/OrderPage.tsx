@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import type { IOrder } from "../types";
 import axios from "axios";
 import { restaurentService } from "../main";
+import UserOrderMap from "../components/UserOrderMap";
 
 const OrderPage = () => {
   const { id } = useParams();
@@ -46,6 +47,34 @@ const OrderPage = () => {
     return () => {
       socket.off("order:update", onOrderUpdate);
       socket.off("order:rider_assigned", onOrderUpdate);
+    };
+  }, [socket]);
+
+  useEffect(() => {
+    if (!socket || !id) return;
+
+    socket.emit("join", `user:${id}`);
+
+    return () => {
+      socket.emit("leave", `user:${id}`);
+    };
+  }, [socket, id]);
+
+  const [riderLocation, setRiderLocation] = useState<[number, number] | null>(
+    null,
+  );
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const onRiderLocation = ({ latitude, longitude }: any) => {
+      console.log("Rider location", latitude, longitude);
+      setRiderLocation([latitude, longitude]);
+    };
+    socket.on("rider:location", onRiderLocation);
+
+    return () => {
+      socket.off("rider:location", onRiderLocation);
     };
   }, [socket]);
 
@@ -117,6 +146,19 @@ const OrderPage = () => {
           Payment Status : {order.paymentStatus}
         </p>
       </div>
+
+      {(order.status === "rider_assigned" || order.status === "picked_up") &&
+      riderLocation ? (
+        <UserOrderMap
+          riderLocation={riderLocation}
+          deliveryLocation={[
+            order.deliveryAddress.latitude!,
+            order.deliveryAddress.longitude!,
+          ]}
+        />
+      ) : (
+        <p>Waiting for rider location</p>
+      )}
     </div>
   );
 };

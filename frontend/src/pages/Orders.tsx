@@ -103,13 +103,17 @@ const Orders = () => {
         {completedOrders.length === 0 ? (
           <p>No completed orders</p>
         ) : (
-          activeOrders.map((order) => (
-            <OrderRow
-              key={order._id}
-              order={order}
-              onClick={() => navigate(`/order/${order._id}`)}
-            />
-          ))
+          completedOrders.map(
+            (
+              order, // ✅ CORRECT
+            ) => (
+              <OrderRow
+                key={order._id}
+                order={order}
+                onClick={() => navigate(`/order/${order._id}`)}
+              />
+            ),
+          )
         )}
       </section>
     </div>

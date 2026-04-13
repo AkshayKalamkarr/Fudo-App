@@ -18,7 +18,7 @@ const statusColor = (status: string) => {
       return "bg-orange-100 text-orange-700";
     case "preparing":
       return "bg-blue-100 text-blue-700";
-    case "ready_for-rider":
+    case "ready_for_rider":
       return "bg-indigo-100 text-indigo-700";
     case "picked_up":
       return "bg-purple-100 text-purple-700";
