@@ -20,6 +20,7 @@ import OrderSucess from "./pages/OrderSucess.js";
 import Orders from "./pages/Orders.js";
 import OrderPage from "./pages/OrderPage.js";
 import RiderDashboard from "./pages/RiderDashboard.js";
+import Admin from "./pages/Admin.js";
 
 const App = () => {
   const { user,loading } = useAppData();
@@ -35,6 +36,10 @@ const App = () => {
 
   if (user && user.role === "rider") {
     return <RiderDashboard />;
+  }
+
+   if (user && user.role === "admin") {
+    return <Admin />;
   }
   return (
     <>
