@@ -2,7 +2,13 @@ import toast from "react-hot-toast";
 import { adminService } from "../main";
 import axios from "axios";
 
-const RiderAdmin = ({ rider, onVerify }: { rider: any; onVerify }) => {
+const RiderAdmin = ({
+  rider,
+  onVerify,
+}: {
+  rider: any;
+  onVerify: () => void;
+}) => {
   const verify = async () => {
     try {
       await axios.patch(
@@ -27,9 +33,10 @@ const RiderAdmin = ({ rider, onVerify }: { rider: any; onVerify }) => {
         className="h-40 w-full object-cover rounded"
         alt=""
       />
-      <h3>{rider.name}</h3>
+      <h3>{rider.phoneNumber}</h3>
       <p className="text-sm text-gray-500">{rider.phone}</p>
-      <p>{rider.autoLocation?.formattedAddress}</p>
+      <p>{rider.aadharNumber}</p>
+      <p>DL Number :{rider.drivingLicenseNumber}</p>
 
       <button
         className="w-full rounded bg-green-500 py-2 text-white hover:bg-green-600"

@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { adminService } from "../main";
 import AdminRestaurantCard from "../components/AdminRestaurantCard";
+import RiderAdmin from "../components/RiderAdmin";
 
 const Admin = () => {
   const [restaurant, setRestaurant] = useState([]);
@@ -92,7 +93,7 @@ const Admin = () => {
           {riders.length === 0 ? (
             <p>No pending rider</p>
           ) : (
-            restaurant.map((r) => <p key={r._id}>{r._id}</p>)
+            restaurant.map((r) => <RiderAdmin key={r._id} rider={r} onVerify={fetchData} />)
           )}
         </div>
       )}
