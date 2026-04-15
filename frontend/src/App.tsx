@@ -12,7 +12,6 @@ import { useAppData } from "./context/AppContext.js";
 import Restaurant from "./pages/Restaurant.js";
 import RestaurantPage from "./pages/RestaurantPage.js";
 import Cart from "./pages/Cart.js";
-import Address from "./pages/Address.js";
 import AddAddressPage from "./pages/Address.js";
 import Checkout from "./pages/Checkout.js";
 import PaymentSucess from "./pages/PaymentSucess.js";
