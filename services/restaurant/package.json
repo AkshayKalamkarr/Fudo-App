@@ -33,6 +33,6 @@
     "@types/mongoose": "^5.11.96",
     "@types/multer": "^2.1.0",
     "concurrently": "^9.2.1",
-    "typescipt": "^1.0.0"
+    "typescript": "^5.0.0"
   }
 }

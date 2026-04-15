@@ -7,12 +7,12 @@ import { AppProvider } from "./context/AppContext.tsx";
 import "leaflet/dist/leaflet.css";
 import { SocketProvider } from "./context/SocketContext.tsx";
 
-export const authService = "http://localhost:5000";
-export const restaurentService = "http://localhost:5001";
-export const utilsService = "http://localhost:5002";
-export const realtimeService = "http://localhost:5004";
-export const riderService = "http://localhost:5005";
-export const adminService = "http://localhost:5006";
+export const authService = "https://fudo-auth.onrender.com";
+export const restaurentService = "https://restaurant-service-umfa.onrender.com";
+export const utilsService = "https://utils-service-709u.onrender.com";
+export const realtimeService = "https://realtime-service-3nck.onrender.com";
+export const riderService = "https://rider-service-tyuf.onrender.com";
+export const adminService = "https://admin-service-z431.onrender.com";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
