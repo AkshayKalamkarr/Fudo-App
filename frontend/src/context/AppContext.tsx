@@ -20,7 +20,7 @@ interface AppProviderProps {
   children: ReactNode;
 }
 
-export const AppProvider = ({ children }) => {
+export const AppProvider = ({ children }: AppProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [isAuth, setIsAuth] = useState(false);
   const [loading, setLoading] = useState(true);
